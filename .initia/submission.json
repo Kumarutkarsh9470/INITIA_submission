@@ -1,0 +1,12 @@
+{
+  "project_name": "SignalMarket",
+  "repo_url": "https://github.com/Kumarutkarsh9470/INITIA_submission",
+  "commit_sha": "5ed9ef25a8b20469e34a8fa437db497bc5b10c01",
+  "rollup_chain_id": "signalmarket",
+  "deployed_address": "0x24Eaa12ecB6557451006ce591580C8A1734e465C",
+  "vm": "evm",
+  "native_feature": "auto-signing",
+  "core_logic_path": "contracts/pmAMM.sol",
+  "native_feature_frontend_path": "frontend/src/hooks/useWallet.tsx",
+  "demo_video_url": "PLACEHOLDER_RECORD_AND_UPDATE"
+}

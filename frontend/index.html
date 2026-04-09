@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>SignalMarket</title>
+    <style>
+      body{margin:0;background:#07070d;color:#e2e8f0;font-family:system-ui,-apple-system,sans-serif}
+      #root:empty::after{content:'Loading SignalMarket…';display:flex;align-items:center;justify-content:center;height:100vh;font-size:14px;color:#4b5563}
+      #boot-error{display:none;position:fixed;inset:0;background:#07070d;z-index:9999;align-items:center;justify-content:center;flex-direction:column;gap:16px;padding:24px;text-align:center}
+      #boot-error h2{color:#f87171;margin:0;font-size:18px}
+      #boot-error p{color:#6b7280;margin:0;font-size:13px;max-width:500px;word-break:break-word}
+      #boot-error button{background:#6366f1;color:#fff;border:none;padding:10px 24px;border-radius:8px;cursor:pointer;font-size:13px}
+    </style>
+  </head>
+  <body>
+    <div id="root"></div>
+    <div id="boot-error">
+      <h2>Something went wrong</h2>
+      <p id="boot-error-msg"></p>
+      <button onclick="location.reload()">Reload</button>
+    </div>
+    <script>
+      window.addEventListener('error', function(e) {
+        var el = document.getElementById('boot-error');
+        var msg = document.getElementById('boot-error-msg');
+        if (el && msg) { el.style.display='flex'; msg.textContent = e.message || 'Unknown error'; }
+      });
+      window.addEventListener('unhandledrejection', function(e) {
+        var el = document.getElementById('boot-error');
+        var msg = document.getElementById('boot-error-msg');
+        if (el && msg) { el.style.display='flex'; msg.textContent = (e.reason && e.reason.message) || 'Promise rejected'; }
+      });
+    </script>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>

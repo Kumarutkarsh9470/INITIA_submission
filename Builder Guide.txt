@@ -1,0 +1,232 @@
+> ## Documentation Index
+> Fetch the complete documentation index at: https://docs.initia.xyz/llms.txt
+> Use this file to discover all available pages before exploring further.
+
+# Builder Guide
+
+Use this page after [Set Up Your Appchain](/hackathon/get-started). Pick a
+direction, prompt your AI agent, deploy, and verify real onchain
+behavior.
+
+Prerequisites:
+
+* **Tools ready**: `weave`, `initiad`, and `minitiad` are installed and in your
+  PATH ([Step 6](/hackathon/get-started#step-6-ai-powered-initia-tool-setup-and-verification)).
+* **Infrastructure live**: your rollup and OPinit/Relayer bots are running
+  ([Step 8](/hackathon/get-started#step-8-setup-interwoven-bots)).
+* **Gas Station keys imported**: your `gas-station` keys are available in the local keyrings
+  ([Step 9](/hackathon/get-started#step-9-final-key-setup)).
+
+## Recommended Flow
+
+1. **Set Up Your Appchain**: Complete [Set Up Your Appchain](/hackathon/get-started) and launch your local environment.
+2. **Choose Your Path**: Decide whether to build your app from scratch or adapt a Blueprint.
+3. **Build Your App With AI**: Implement your app and confirm it works onchain.
+4. **Debug and Refine**: Fix frontend or onchain issues before packaging your project.
+5. **Prepare Your Submission**: Complete [Submission Requirements](/hackathon/submission-requirements).
+
+## Part 1: Choose Your Path
+
+You can either build your app from scratch with your AI agent or start from a
+Blueprint that matches the native feature you want to implement.
+
+<CardGroup cols={2}>
+  <Card title="Build From Scratch" icon="hammer" href="#part-2-build-your-app-with-ai">
+    Start from a blank project and use the AI-assisted workflow below to build,
+    deploy, and verify your app.
+  </Card>
+
+  <Card title="Choose Your Blueprint" icon="drafting-compass" href="#choose-your-blueprint">
+    Start from a Blueprint that already maps to a supported native feature,
+    then adapt it into your own original project.
+  </Card>
+</CardGroup>
+
+<Note>
+  **Blueprint Path:** If you choose a Blueprint, you can jump directly into
+  that tutorial. Come back to this page later for debugging help or official
+  references if you need them. After you adapt the Blueprint into your own
+  original app, use
+  [Submission Requirements](/hackathon/submission-requirements) to confirm your
+  final submission is complete.
+</Note>
+
+### Choose Your Blueprint
+
+To qualify for the hackathon prizes, your project must implement at least one
+supported Native Feature. These Blueprints provide implementation patterns you
+can adapt, or use as references while building your own concept.
+
+<CardGroup cols={1}>
+  <Card title="Blueprint 1: BlockForge Game (Auto-signing)" icon="wand-magic-sparkles" href="/hackathon/examples/move-game">
+    A high-frequency application where the blockchain handles logic silently in
+    the background. Users approve a session once, then continue interacting
+    without repeated wallet popups.
+
+    * **Native Feature:** [`Auto-signing`](/interwovenkit/features/autosign/introduction)
+    * **Best for:** Gaming, Microtransactions, High-frequency trading.
+  </Card>
+
+  <Card title="Blueprint 2: MiniBank (Interwoven Bridge)" icon="bridge" href="/hackathon/examples/evm-bank">
+    An application that allows users to move assets between Initia L1 and an
+    appchain without leaving the app.
+
+    * **Native Feature:** [`Interwoven Bridging`](/interwovenkit/features/transfers/deposit-withdraw)
+    * **Best for:** DeFi, Cross-chain payments, Multi-chain apps.
+  </Card>
+
+  <Card title="Blueprint 3: MemoBoard (Initia Usernames)" icon="user-group" href="/hackathon/examples/wasm-social">
+    An application that prioritizes human-readable identities, replacing
+    complex hex addresses with personal usernames.
+
+    * **Native Feature:** [`Initia Usernames`](/developers/developer-guides/integrating-initia-apps/usernames)
+    * **Best for:** Social apps, Peer-to-peer payments, Community apps.
+  </Card>
+</CardGroup>
+
+<Note>
+  **Originality matters:** Whether you build from scratch or adapt a Blueprint,
+  judges will look for clear custom logic, UX, and product differentiation.
+</Note>
+
+## Part 2: Build Your App With AI
+
+### Funding Your Personal Wallet
+
+Before you can interact with your appchain via a browser wallet (like Keplr,
+Leap, or MetaMask), you need to fund your personal address from your Gas
+Station.
+
+1. Copy your wallet address (`init1...`).
+
+2. Ask your AI agent to fund your wallet:
+
+```terminal title="Prompt: Fund your personal wallet" wrap theme={null}
+Using the `initia-appchain-dev` skill, please fund my personal wallet <YOUR_WALLET_ADDRESS> with 1 INIT on L1 and 100 of my appchain's native tokens on L2.
+```
+
+### Development Workflow
+
+1. **Describe the Goal**: Tell the AI what you want to achieve and why.
+
+   <Tip>
+     **Gather Submission Metadata Early:** As you build, keep track of the
+     deployed contract or module address and the final repo paths you plan to
+     submit for your core logic and native feature frontend files. You will use
+     them in the [Submission JSON](/hackathon/submission-requirements#submission-json).
+   </Tip>
+
+2. **Build and Test**: Clearly describe your app's behavior and rules, then let
+   the AI write the code and unit tests.
+
+   ```terminal title="Prompt: Create and test the contract" wrap theme={null}
+   Using the `initia-appchain-dev` skill, please create a new <MOVE / EVM / WASM> contract project in a directory named <PROJECT_NAME>, implement the core logic for <APP_NAME> with the following requirements:
+   <APP_REQUIREMENTS>
+
+   Please also create and run unit tests that verify both success and failure paths.
+   ```
+
+3. **Deploy to Your Appchain**: Instruct the AI to deploy your contract/module to your appchain.
+
+   ```terminal title="Prompt: Deploy to your appchain" wrap theme={null}
+   Using the `initia-appchain-dev` skill, please build and deploy my contract/module from the <PROJECT_NAME> directory to my appchain using my Gas Station account.
+
+   If this VM requires instantiate after deploy, run that too, then return the deployed address.
+   ```
+
+4. **Verify Onchain Behavior**: Ask the AI to verify your live deployment with interactions and state queries.
+
+   ```terminal title="Prompt: Smoke test live deployment" wrap theme={null}
+   Using the `initia-appchain-dev` skill, I want to smoke test my live <CONTRACT_NAME> on my appchain.
+
+   Please execute 2-3 realistic user actions, then query state after each step and confirm the observed results match expected behavior.
+   ```
+
+5. **Integrate the Frontend**: Ask the AI to build or update your frontend and connect it to your appchain.
+
+   ```terminal title="Prompt: Build the frontend" wrap theme={null}
+   Using the `initia-appchain-dev` skill, please create or update my frontend in <FRONTEND_PROJECT_NAME> to connect to my appchain with `InterwovenKit`, integrate my deployed <CONTRACT_OR_MODULE_NAME>, and implement the core user flow for <APP_NAME>.
+   ```
+
+   <Note>
+     **Run the Frontend Locally:** After the frontend is implemented, follow
+     your AI agent's instructions to start the app locally and verify the core
+     user flow in the browser.
+   </Note>
+
+6. **Add a Native Feature**: Ask the AI to implement one supported native feature and wire it into your app flow.
+
+   <Note>
+     **Supported Native Features:** To be eligible for prizes, your project
+     should implement at least one supported native feature. Choose one of the
+     following:
+
+     * `auto-signing`
+     * `interwoven-bridge`
+     * `initia-usernames`
+
+     These features are covered in the Blueprint tutorials, but you can also
+     add them to a project you build from scratch.
+   </Note>
+
+   ```terminal title="Prompt: Add a native feature" wrap theme={null}
+   Using the `initia-appchain-dev` skill, please add <AUTO-SIGNING / INTERWOVEN BRIDGE / INITIA USERNAMES> support to my app.
+
+   Please update the frontend and any required configuration so this native feature works in the core user flow.
+   ```
+
+## Part 3: Debugging & Troubleshooting
+
+### Debugging Workflow
+
+Whether you are building from scratch or adapting a Blueprint, errors are
+inevitable.
+
+1. **Open the Browser Console**: Press `F12` or `Cmd+Option+J` to see the exact
+   error logs.
+2. **Provide Project Context**: Ensure your AI agent is open in your project root.
+   This allows it to reference your `package.json`, your `interwovenkit`
+   initialization, and your specific chain configuration.
+3. **Evaluate and Fix the Error**: Ask your AI agent to fix the issue directly,
+   and include the exact console error in your prompt.
+
+   ```terminal title="Prompt: Fix the error in my codebase" wrap theme={null}
+   Please find and fix this error directly in my codebase, then tell me what changed.
+
+   [PASTE_CONSOLE_ERROR]
+   ```
+
+## Part 4: Prepare Your Submission
+
+Use [Submission Requirements](/hackathon/submission-requirements) to complete
+your final submission files and confirm your project is eligible.
+
+### Official References
+
+* **Official Docs**: Visit [docs.initia.xyz](https://docs.initia.xyz/) for
+  architectural details and API references.
+* **Initia Examples**: Reference the
+  [initia-labs/examples](https://github.com/initia-labs/examples) repository for
+  working code across all VMs (EVM, Move, Wasm).
+* **Core Repositories**: Explore [initia-labs](https://github.com/initia-labs)
+  on GitHub to see the underlying implementation of the SDKs and CLI tools.
+* **Initia L1**: [initia-labs/initia](https://github.com/initia-labs/initia)
+  contains the core Layer 1 source code.
+* **Weave CLI**: [initia-labs/weave](https://github.com/initia-labs/weave) is
+  the main CLI for launching and managing appchains.
+* **InterwovenKit**:
+  [initia-labs/interwovenkit](https://github.com/initia-labs/interwovenkit) is
+  the standard React SDK for Initia frontends.
+* **Initia.js**: [initia-labs/initia.js](https://github.com/initia-labs/initia.js)
+  is the primary JavaScript library for blockchain interactions.
+
+#### Useful Endpoints
+
+* **Local Rollup Indexer:** `http://localhost:8080`
+* **L1 Indexer Swagger:** `https://indexer.initia.xyz/swagger/index.html`
+* **L1 Testnet RPC:** `https://rpc.testnet.initia.xyz`
+* **L1 Testnet REST:** `https://rest.testnet.initia.xyz`
+* **Faucet:** `https://faucet.testnet.initia.xyz`
+
+
+Built with [Mintlify](https://mintlify.com).

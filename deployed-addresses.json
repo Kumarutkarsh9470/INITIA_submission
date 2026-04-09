@@ -1,0 +1,16 @@
+[
+  {
+    "network": "minievm",
+    "chainId": 728643862094908,
+    "timestamp": "2026-04-15T11:04:45.412Z",
+    "addresses": {
+      "CollateralToken": "0xD468C9BA7C1EE7e8050615c83c116E5c242b41D6",
+      "Oracle": "0x80F279A157d0F5c31051A60d29a4B7E7373D7e41",
+      "pmAMM": "0xc72Db447ff45Fe77993052523D8310cc5B15439c",
+      "ForecasterReputation": "0x8617F8a49f61A1D17b12474037D4BCB287dA7e24",
+      "ResolutionCouncil": "0x6a2e3E5c33Af1CE4AAf5EA2236D212383d2CEA1F",
+      "MarketFactory": "0x24Eaa12ecB6557451006ce591580C8A1734e465C",
+      "PositionVault": "0x1379b776511AdE5f08efEb881D522862ae2AbE81"
+    }
+  }
+]

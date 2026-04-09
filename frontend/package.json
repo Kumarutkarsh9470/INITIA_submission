@@ -1,0 +1,37 @@
+{
+  "name": "frontend",
+  "version": "1.0.0",
+  "type": "module",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc && vite build",
+    "preview": "vite preview"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@initia/icons-react": "^2.1.0",
+    "@initia/initia.js": "^1.1.0",
+    "@initia/interwovenkit-react": "^2.6.0",
+    "@tanstack/react-query": "^5.97.0",
+    "react": "^19.2.5",
+    "react-dom": "^19.2.5",
+    "react-hot-toast": "^2.6.0",
+    "react-router-dom": "^7.14.0",
+    "viem": "^2.47.11",
+    "wagmi": "2.17.2"
+  },
+  "devDependencies": {
+    "@tailwindcss/vite": "4.1",
+    "@types/react": "^19.2.14",
+    "@types/react-dom": "^19.2.3",
+    "@vitejs/plugin-react": "^4.7.0",
+    "tailwindcss": "4.1",
+    "typescript": "^6.0.2",
+    "vite": "^5.4.21",
+    "vite-plugin-node-polyfills": "^0.26.0"
+  }
+}
