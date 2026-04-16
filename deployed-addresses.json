@@ -1,5 +1,131 @@
 [
   {
+    "network": "localhost",
+    "chainId": 31337,
+    "timestamp": "2026-04-09T16:55:08.576Z",
+    "addresses": {
+      "CollateralToken": "0x5FbDB2315678afecb367f032d93F642f64180aa3",
+      "Oracle": "0xe7f1725E7734CE288F8367e1Bb143E90bb3F0512",
+      "pmAMM": "0xCf7Ed3AccA5a467e9e704C703E8D87F634fB0Fc9",
+      "ForecasterReputation": "0xDc64a140Aa3E981100a9becA4E685f962f0cF6C9",
+      "ResolutionCouncil": "0x5FC8d32690cc91D4c39d9d3abcBD16989F875707",
+      "MarketFactory": "0x0165878A594ca255338adfa4d48449f69242Eb8F",
+      "PositionVault": "0xa513E6E4b8f2a923D98304ec87F64353C4D5C853"
+    }
+  },
+  {
+    "network": "minievm",
+    "chainId": 2891653883154692,
+    "timestamp": "2026-04-13T02:03:38.664Z",
+    "addresses": {
+      "CollateralToken": "0xFF2D4C4c0B23e738d0eef2c14FA1Cb82c550ddD1",
+      "Oracle": "0x031ECb63480983FD216D17BB6e1d393f3816b72F",
+      "pmAMM": "0xEeD7847588190b6c70640aa13e1527a4bB4675be",
+      "ForecasterReputation": "0x83d29e853fa1804999016De4658da321d500CF4C",
+      "ResolutionCouncil": "0x75212d74cF5a156D8669318Fc7bb98f786f76568",
+      "MarketFactory": "0xa154928b81b483ffb06DF05c979e7db1384276Cf",
+      "PositionVault": "0x6edA8927A0F94503297861De3318CFf212E89C89"
+    }
+  },
+  {
+    "network": "minievm",
+    "chainId": 2891653883154692,
+    "timestamp": "2026-04-13T02:04:27.463Z",
+    "addresses": {
+      "CollateralToken": "0xFE42577B5e33Beb6D69fDFC5eb87c2B4e07B7F6e",
+      "Oracle": "0x031ECb63480983FD216D17BB6e1d393f3816b72F",
+      "pmAMM": "0x8A4F6755f7BbcE213CA9697d9B00ba80053816a6",
+      "ForecasterReputation": "0x93A0b0af86c1d31592A05A1Ddd153df2bf638AAb",
+      "ResolutionCouncil": "0x091C3DbC98f49438DaA8128C79CAEaF0F1B6694C",
+      "MarketFactory": "0xB7ED457AD161769A979652F7f925c9C451968087",
+      "PositionVault": "0xeF05C2a3e52377C6Bf4C8F546464748a3bad0379"
+    }
+  },
+  {
+    "network": "minievm",
+    "chainId": 2891653883154692,
+    "timestamp": "2026-04-13T02:14:34.420Z",
+    "addresses": {
+      "CollateralToken": "0xA82cB7a77e6772f01DC172636B382f331B980b9C",
+      "Oracle": "0x031ECb63480983FD216D17BB6e1d393f3816b72F",
+      "pmAMM": "0xb3E1CC3BE16517C036cB219D0845A8A85Bb77415",
+      "ForecasterReputation": "0x97187b7B0Da730dD981a928EF47c305b0E365A8C",
+      "ResolutionCouncil": "0x55dC408CC6CF86D8FD8856f62212Daa1215Bb4Df",
+      "MarketFactory": "0x56a109e6eCAE53bD82FCbb956719CF09199983DC",
+      "PositionVault": "0xe96c127f16412F3b31b26C363B2dc023A6ae3522"
+    }
+  },
+  {
+    "network": "minievm",
+    "chainId": 2891653883154692,
+    "timestamp": "2026-04-13T08:49:22.804Z",
+    "addresses": {
+      "CollateralToken": "0x54f4881D43Db7e2DF30D97263A5c72e6E0Bc97f8",
+      "Oracle": "0x031ECb63480983FD216D17BB6e1d393f3816b72F",
+      "pmAMM": "0xdfCc357C7BC74B2879E32C10cf0E9ddD14857Af1",
+      "ForecasterReputation": "0x05Fe567e9c1cefCeFD89950Da9f0919243e9eA64",
+      "ResolutionCouncil": "0xB655cE09f4E77b71f903b24b88C465231B05105A",
+      "MarketFactory": "0x32055A85867E31820E190c5f36BbFFe615930783",
+      "PositionVault": "0xB987A5EE7786De964A2CbBE2a753Cdd52308D159"
+    }
+  },
+  {
+    "network": "minievm",
+    "chainId": 2891653883154692,
+    "timestamp": "2026-04-13T10:44:21.118Z",
+    "addresses": {
+      "CollateralToken": "0xe8D6f42916f75DD07a0CFC97d29a1d7Cdf16D758",
+      "Oracle": "0x031ECb63480983FD216D17BB6e1d393f3816b72F",
+      "pmAMM": "0xc7E7CDAc83da5e75B9D19CaEC63bb9b47e1f3000",
+      "ForecasterReputation": "0xF63813B4695642896946A2Aa2C049c11249E557B",
+      "ResolutionCouncil": "0x7841C961B00DBE64f32443AC8Ed4b3c0F64d0C57",
+      "MarketFactory": "0x8ea868b5711b058410C998eeD7C1e639AB520fB9",
+      "PositionVault": "0x22bc770d507C30c6666030DbF598819a2F81e9A4"
+    }
+  },
+  {
+    "network": "minievm",
+    "chainId": 2891653883154692,
+    "timestamp": "2026-04-13T14:17:28.435Z",
+    "addresses": {
+      "CollateralToken": "0x6779a0dEA3436C02B52B1C71C9F1B8586b756A9a",
+      "Oracle": "0x031ECb63480983FD216D17BB6e1d393f3816b72F",
+      "pmAMM": "0xB50021c915CfbE2FBD37E59608edCf80B554B907",
+      "ForecasterReputation": "0x9a74EB9a1c1097F69bAd899427E2514Bfe28f4Ee",
+      "ResolutionCouncil": "0x65ccF89d8F856Bcb89535A46957eCc928367CCD3",
+      "MarketFactory": "0x657E84b09Fd018f576d514d1DC5afe6C9cD447bC",
+      "PositionVault": "0xd577ca263eCBe6FEfa4bC02842781bdc5F28Ec57"
+    }
+  },
+  {
+    "network": "minievm",
+    "chainId": 2891653883154692,
+    "timestamp": "2026-04-13T14:39:51.400Z",
+    "addresses": {
+      "CollateralToken": "0x33802fAB1B484597B852fBAF9eE1B3c77364E8E3",
+      "Oracle": "0x031ECb63480983FD216D17BB6e1d393f3816b72F",
+      "pmAMM": "0x8D9697C55554123aF7D76517301D2dF2B080915B",
+      "ForecasterReputation": "0x2cf042b4aCD2D74B5Cee4DD5612fFE7D99383951",
+      "ResolutionCouncil": "0x57DE0A60Ad0c47ce212AA84c04b7E13ac300BC64",
+      "MarketFactory": "0x3B0Ad24EfBfC062893e2Fd618EF1c27E2014F508",
+      "PositionVault": "0x2A5A5104d4Db59B897235CaB90b48AedAe1d3658"
+    }
+  },
+  {
+    "network": "minievm",
+    "chainId": 2891653883154692,
+    "timestamp": "2026-04-13T23:39:46.177Z",
+    "addresses": {
+      "CollateralToken": "0x5efABA4aCe17445bd28BCD35C754B494176A3d35",
+      "Oracle": "0x031ECb63480983FD216D17BB6e1d393f3816b72F",
+      "pmAMM": "0xa859CDb86Df09A7b757b8fB35DAC42CcDf1d9CB3",
+      "ForecasterReputation": "0x4Aa7e9e2C8453d2F7ee04052971097a73067618e",
+      "ResolutionCouncil": "0x9b121820C66Bb7B968C55462E72cd3665332c62C",
+      "MarketFactory": "0x3517b52CECE6298C2BADDEA578a276f02eD1E713",
+      "PositionVault": "0x99C5D38266c7385581cBCb7019c7c97D8CF58d68"
+    }
+  },
+  {
     "network": "minievm",
     "chainId": 728643862094908,
     "timestamp": "2026-04-15T11:04:45.412Z",
@@ -11,6 +137,20 @@
       "ResolutionCouncil": "0x6a2e3E5c33Af1CE4AAf5EA2236D212383d2CEA1F",
       "MarketFactory": "0x24Eaa12ecB6557451006ce591580C8A1734e465C",
       "PositionVault": "0x1379b776511AdE5f08efEb881D522862ae2AbE81"
+    }
+  },
+  {
+    "network": "minievm",
+    "chainId": 728643862094908,
+    "timestamp": "2026-04-16T01:44:24.709Z",
+    "addresses": {
+      "CollateralToken": "0xbD5AfF3e349a83F2b98f5551c0ba6ee0B534C6aB",
+      "Oracle": "0x031ECb63480983FD216D17BB6e1d393f3816b72F",
+      "pmAMM": "0x61c0874572E1749a279f9721F7f885303d054a77",
+      "ForecasterReputation": "0x2F8240e3201E5645C3F5B5AE2e1B104a10644a0F",
+      "ResolutionCouncil": "0x8E4b62Ca538D46dE98f7bd908833856664ED60A5",
+      "MarketFactory": "0xE0da5FE23795e640f7B46c1EFC25178883C6D529",
+      "PositionVault": "0x68a167Ba7684696A6B3fe2C90FB864aEFaF95D22"
     }
   }
 ]

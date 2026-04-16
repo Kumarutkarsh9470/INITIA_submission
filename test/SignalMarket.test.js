@@ -522,4 +522,94 @@ describe("SignalMarket — Full E2E", function () {
       expect(balAfter).to.be.gt(balBefore);
     });
   });
+
+  // ──────── Escalation of Creator Resolve ────────
+  describe("Creator Resolve Escalation", function () {
+    let escalateMarketId;
+
+    it("should create a CREATOR_RESOLVE market", async function () {
+      const currentBlock = await ethers.provider.getBlockNumber();
+      const expiry = currentBlock + 15;
+
+      await collateral.connect(user1).approve(await factory.getAddress(), ethers.MaxUint256);
+      const tx = await factory.connect(user1).createMarket(
+        "Will it rain tomorrow?",
+        ["Yes", "No"],
+        expiry,
+        ethers.parseEther("100"),
+        ethers.parseEther("100"),
+        2, // CREATOR_RESOLVE
+        1, // EVENT
+        "",
+        0
+      );
+      const receipt = await tx.wait();
+      escalateMarketId = await factory.nextMarketId() - 1n;
+    });
+
+    it("should trigger resolution and then fail submitOutcome after deadline passes", async function () {
+      // Mine blocks past expiry
+      const meta = await factory.getMarket(escalateMarketId);
+      const expiry = Number(meta[2]);
+      const currentBlock = await ethers.provider.getBlockNumber();
+      const blocksToMine = expiry - currentBlock + 1;
+      if (blocksToMine > 0) {
+        await ethers.provider.send("hardhat_mine", ["0x" + blocksToMine.toString(16)]);
+      }
+
+      // Trigger resolution
+      await factory.connect(user1).triggerResolution(escalateMarketId);
+      const metaAfter = await factory.getMarket(escalateMarketId);
+      expect(Number(metaAfter[6])).to.equal(1); // RESOLVING
+
+      // Mine blocks past creator deadline (500 blocks)
+      await ethers.provider.send("hardhat_mine", ["0x" + (501).toString(16)]);
+
+      // Creator should fail to resolve
+      await expect(
+        factory.connect(user1).submitOutcome(escalateMarketId, 1)
+      ).to.be.revertedWith("Factory: creator deadline passed");
+    });
+
+    it("should allow anyone to escalate to council after deadline", async function () {
+      // user2 escalates — not the creator
+      await factory.connect(user2).escalateCreatorResolve(escalateMarketId);
+
+      // Council resolution should be open now
+      const res = await council.getResolution(escalateMarketId);
+      expect(res.open).to.be.true;
+      expect(res.finalized).to.be.false;
+    });
+
+    it("should not allow escalation before deadline passes", async function () {
+      // Create another market to test this
+      const currentBlock = await ethers.provider.getBlockNumber();
+      const expiry = currentBlock + 15;
+
+      const tx = await factory.connect(user1).createMarket(
+        "Will the sun rise?",
+        ["Yes", "No"],
+        expiry,
+        ethers.parseEther("100"),
+        ethers.parseEther("100"),
+        2,
+        1,
+        "",
+        0
+      );
+      const receipt = await tx.wait();
+      const mktId = await factory.nextMarketId() - 1n;
+
+      // Mine past expiry
+      await ethers.provider.send("hardhat_mine", ["0x" + (16).toString(16)]);
+
+      // Trigger resolution
+      await factory.triggerResolution(mktId);
+
+      // Try to escalate immediately — should fail (creator still has time)
+      await expect(
+        factory.connect(user2).escalateCreatorResolve(mktId)
+      ).to.be.revertedWith("Factory: creator still has time");
+    });
+  });
 });

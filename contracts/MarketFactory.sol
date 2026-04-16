@@ -193,6 +193,21 @@ contract MarketFactory is Ownable, ReentrancyGuard {
         _finalizeResolution(marketId, outcome);
     }
 
+    /// @notice Escalate a CREATOR_RESOLVE market to Social Council if the creator missed the deadline.
+    function escalateCreatorResolve(uint256 marketId) external {
+        MarketMeta storage m = markets[marketId];
+        require(m.state == MarketState.RESOLVING, "Factory: not resolving");
+        require(m.resolutionType == ResolutionType.CREATOR_RESOLVE, "Factory: not creator-resolve");
+        require(block.number > m.creatorDeadline, "Factory: creator still has time");
+
+        // Forfeit the creator bond (stays in contract as protocol revenue)
+        m.creatorBond = 0;
+
+        // Escalate to council
+        council.openResolution(marketId);
+        emit ResolutionTriggered(marketId, ResolutionType.SOCIAL_COUNCIL);
+    }
+
     function finalizeResolution(uint256 marketId, uint8 outcome) external {
         require(msg.sender == address(council), "Factory: only council");
         MarketMeta storage m = markets[marketId];

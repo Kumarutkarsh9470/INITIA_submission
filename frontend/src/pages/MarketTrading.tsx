@@ -50,6 +50,7 @@ export default function MarketTrading() {
   const [ammTotalBlocks, setAmmTotalBlocks] = useState(0);
   const [reserveYes, setReserveYes] = useState(0n);
   const [reserveNo, setReserveNo] = useState(0n);
+  const [creatorDeadline, setCreatorDeadline] = useState(0n);
   const [isLoading, setIsLoading] = useState(true);
   const [txPending, setTxPending] = useState(false);
   const [buyStep, setBuyStep] = useState<"idle" | "approving" | "buying">("idle");
@@ -98,7 +99,7 @@ export default function MarketTrading() {
       const block = await publicClient.getBlockNumber();
       setBlockNumber(block);
       const meta = (await publicClient.readContract({ address: ADDRESSES.MarketFactory, abi: MarketFactoryABI, functionName: "getMarket", args: [marketId] })) as [string, string[], bigint, string, number, number, number, string, bigint, bigint, bigint];
-      setQuestion(meta[0]); setExpiryBlock(meta[2]); setCreator(meta[3]); setResTypeIdx(Number(meta[4])); setCategoryIdx(Number(meta[5])); setMarketState(Number(meta[6])); setOraclePairId(meta[7] as string);
+      setQuestion(meta[0]); setExpiryBlock(meta[2]); setCreator(meta[3]); setResTypeIdx(Number(meta[4])); setCategoryIdx(Number(meta[5])); setMarketState(Number(meta[6])); setOraclePairId(meta[7] as string); setCreatorDeadline(meta[10] as bigint);
 
       try {
         const ammData = (await publicClient.readContract({ address: ADDRESSES.pmAMM, abi: pmAMMABI, functionName: "markets", args: [marketId] })) as [bigint, bigint, bigint, bigint, bigint, bigint, boolean, number, string];
@@ -182,10 +183,23 @@ export default function MarketTrading() {
     finally { setTxPending(false); }
   }
 
+  async function handleEscalate() {
+    if (!account) return;
+    setTxPending(true);
+    try {
+      toast.loading("Escalating to Council…", { id: "resolve" });
+      await sendTx({ to: ADDRESSES.MarketFactory, data: encodeFunctionData({ abi: MarketFactoryABI, functionName: "escalateCreatorResolve", args: [marketId] }) });
+      toast.success("Escalated to Social Council!", { id: "resolve" }); fetchData();
+    } catch (e: unknown) { toast.error(e instanceof Error ? e.message : "Failed", { id: "resolve" }); }
+    finally { setTxPending(false); }
+  }
+
   const isBusy = txPending || buyStep !== "idle";
   const isCreatorResolve = resTypeIdx === 2;
+  const isCouncil = resTypeIdx === 1;
   const isCreator = account && creator && account.toLowerCase() === creator.toLowerCase();
   const creatorBlocked = isCreatorResolve && isCreator;
+  const creatorDeadlinePassed = creatorDeadline > 0n && blockNumber > creatorDeadline;
 
   if (isLoading) {
     return (
@@ -288,14 +302,30 @@ export default function MarketTrading() {
             </div>
           )}
 
-          {/* Creator Resolve */}
-          {marketState === 1 && resTypeIdx === 2 && isCreator && (
+          {/* Creator Resolve — creator can still resolve */}
+          {marketState === 1 && isCreatorResolve && isCreator && !creatorDeadlinePassed && (
             <div className="animate-fade-in-up glass rounded-2xl p-5 border-purple-500/20">
               <p className="text-sm text-purple-300 mb-3">Select the winning outcome:</p>
               <div className="flex gap-3">
                 <button onClick={() => handleSubmitOutcome(1)} disabled={isBusy} className="flex-1 btn-primary py-3 text-sm bg-gradient-to-r from-emerald-600 to-green-600">{isBusy ? "…" : "YES wins"}</button>
                 <button onClick={() => handleSubmitOutcome(2)} disabled={isBusy} className="flex-1 btn-primary py-3 text-sm bg-gradient-to-r from-red-600 to-rose-600">{isBusy ? "…" : "NO wins"}</button>
               </div>
+            </div>
+          )}
+
+          {/* Creator Resolve — deadline passed, anyone can escalate to council */}
+          {marketState === 1 && isCreatorResolve && creatorDeadlinePassed && account && (
+            <div className="animate-fade-in-up glass rounded-2xl p-5 border-rose-500/20">
+              <p className="text-sm text-rose-300 mb-3">Creator missed the resolution deadline. Escalate to Social Council for community voting.</p>
+              <button onClick={handleEscalate} disabled={isBusy} className="btn-primary w-full py-3 text-sm bg-gradient-to-r from-rose-600 to-orange-600">{isBusy ? "Processing…" : "Escalate to Council"}</button>
+            </div>
+          )}
+
+          {/* Social Council — link to resolution panel */}
+          {marketState === 1 && isCouncil && account && (
+            <div className="animate-fade-in-up glass rounded-2xl p-5 border-violet-500/20">
+              <p className="text-sm text-violet-300 mb-3">This market is being resolved by the Social Council. Register, vote, and finalize on the Resolution Panel.</p>
+              <button onClick={() => navigate(`/resolution/${id}`)} className="btn-primary w-full py-3 text-sm bg-gradient-to-r from-violet-600 to-purple-600">Go to Resolution Panel →</button>
             </div>
           )}
         </div>

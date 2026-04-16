@@ -303,7 +303,7 @@ export default function ResolutionPanel() {
         <div className="glass rounded-2xl p-6 space-y-5">
           <div className="flex items-start justify-between gap-4">
             <div className="space-y-1.5 flex-1 min-w-0">
-              <p className="text-xs font-semibold text-violet-400 uppercase tracking-widest">Social Council · Market #{id}</p>
+              <p className="text-xs font-semibold text-violet-400 uppercase tracking-widest">Resolution Council · Market #{id}</p>
               <h1 className="text-xl font-bold text-white leading-snug break-words">{market.question}</h1>
             </div>
             <StatusBadge resolution={resolution} />
