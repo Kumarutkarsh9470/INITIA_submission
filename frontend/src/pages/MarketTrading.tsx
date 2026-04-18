@@ -146,7 +146,14 @@ export default function MarketTrading() {
       await sendTx({ to: ADDRESSES.pmAMM, data: encodeFunctionData({ abi: pmAMMABI, functionName: "sell", args: [marketId, side === "yes", sellSharesParsed, 0n] }) });
       toast.success("Sell confirmed!", { id: "trade" });
       setSellShares(""); fetchData();
-    } catch (e: unknown) { toast.error(e instanceof Error ? e.message : "Failed", { id: "trade" }); }
+    } catch (e: unknown) {
+      const msg = e instanceof Error ? e.message : String(e);
+      if (msg.includes("Reverted") || msg.includes("rpc error") || msg.includes("failed to execute message")) {
+        toast.error("This sell transaction is not supported. The market may have insufficient liquidity or the position cannot be sold at this time.", { id: "trade" });
+      } else {
+        toast.error(msg || "Failed", { id: "trade" });
+      }
+    }
     finally { setTxPending(false); }
   }
 
