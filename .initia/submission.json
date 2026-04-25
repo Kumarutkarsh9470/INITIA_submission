@@ -8,5 +8,5 @@
   "native_feature": "auto-signing",
   "core_logic_path": "contracts/MarketFactory.sol",
   "native_feature_frontend_path": "frontend/src/main.tsx",
-  "demo_video_url": "PLACEHOLDER"
+  "demo_video_url": "https://youtu.be/S5JiXDznLlA"
 }
