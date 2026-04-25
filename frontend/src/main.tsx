@@ -39,7 +39,7 @@ const queryClient = new QueryClient({
 });
 
 // ── Custom chain definition for our MiniEVM appchain ──
-const COSMOS_CHAIN_ID = import.meta.env.VITE_COSMOS_CHAIN_ID || "trying";
+const COSMOS_CHAIN_ID = import.meta.env.VITE_COSMOS_CHAIN_ID || "signalmarket";
 
 const jsonRpcRaw = import.meta.env.VITE_JSON_RPC_URL || "http://localhost:8545";
 const cosmosRpcRaw = import.meta.env.VITE_COSMOS_RPC_URL || "http://localhost:26657";

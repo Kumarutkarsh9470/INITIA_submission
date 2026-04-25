@@ -13,7 +13,7 @@ import { useInterwovenKit } from "@initia/interwovenkit-react";
 import { AccAddress } from "@initia/initia.js";
 import type { Address } from "viem";
 
-const COSMOS_CHAIN_ID = import.meta.env.VITE_COSMOS_CHAIN_ID || "trying";
+const COSMOS_CHAIN_ID = import.meta.env.VITE_COSMOS_CHAIN_ID || "signalmarket";
 
 export interface SendTxParams {
   to: string;
