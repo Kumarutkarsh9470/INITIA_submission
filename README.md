@@ -1,8 +1,8 @@
-# SignalMarket — Prediction Market Protocol on Initia MiniEVM
+# SignalMarket
 
-A decentralized prediction market protocol built on **Initia MiniEVM** with parimutuel AMM pricing (pmAMM), reputation-weighted governance, and a lending vault.
+Decentralized prediction markets on Initia. Trade outcomes, build reputation, and earn yield — all on our own MiniEVM appchain.
 
-**Live Site:** [http://207.180.203.32:8080](http://207.180.203.32:8080)
+**Live at:** [http://207.180.203.32:8080](http://207.180.203.32:8080)
 
 ---
 
@@ -12,43 +12,43 @@ A decentralized prediction market protocol built on **Initia MiniEVM** with pari
 
 ### Project Overview
 
-SignalMarket is a decentralized prediction market protocol where users trade binary outcome tokens, build on-chain reputation through forecasting accuracy, and earn yield by lending to the Position Vault. It solves the problem of credible, decentralized event resolution by combining parimutuel AMM pricing with reputation-weighted governance — giving accurate forecasters more protocol influence, lower fees, and higher borrowing power.
+SignalMarket lets you bet on real-world events using binary outcome tokens. Think "Will ETH hit $5K by July?" — you buy YES or NO tokens, and the market price reflects collective belief. What makes us different: your prediction track record actually matters. Good forecasters earn higher reputation scores, which unlock lower fees, governance power, and better borrowing terms in the lending vault.
+
+We built this because existing prediction markets treat every user the same regardless of accuracy. SignalMarket fixes that by tying protocol influence directly to forecasting skill.
 
 ### Implementation Detail
 
-- **The Custom Implementation**: 8 interconnected Solidity contracts implementing a full prediction market protocol — pmAMM with on-chain Gaussian CDF pricing (Abramowitz & Stegun approximation) and effective liquidity decay over time, ForecasterReputation with multi-factor scoring (accuracy, calibration, log-weighted volume, recency), ResolutionCouncil with weighted supermajority voting and bond slashing, PositionVault for lending against ERC-1155 outcome-token collateral with utilization-based interest rates, and MarketFactory supporting three resolution modes (Oracle, Council, Creator). 30 end-to-end tests verify the complete lifecycle.
-- **The Native Feature**: **Auto-signing** is enabled for `/minievm.evm.v1.MsgCall` transactions via InterwovenKit. Users approve a session once on the Dashboard, then trade rapidly without repeated wallet popups — essential for a prediction market where speed matters during breaking events. The **Interwoven Bridge** is also integrated via InterwovenKit, allowing users to bridge INIT from L1 directly within the app.
+- **The Custom Implementation**: We wrote 8 Solidity contracts from scratch. The core is a parimutuel AMM (pmAMM) that prices outcome tokens using an on-chain Gaussian CDF approximation — not just a simple constant-product curve. On top of that, we built a reputation system that tracks accuracy, calibration, volume, and recency to score every forecaster. Markets can be resolved three ways: via oracle, community council vote, or creator decision. There's also a lending vault where users earn yield by depositing sUSD, and borrowers put up their outcome tokens as collateral with utilization-based interest rates. 30 tests cover the full lifecycle.
+
+- **The Native Feature**: We use **auto-signing** for `/minievm.evm.v1.MsgCall` transactions through InterwovenKit. Once you enable it on the Dashboard, you can trade without approving every single transaction in your wallet — which matters a lot in a prediction market where you need to move fast when news breaks. We also integrated the **Interwoven Bridge** so users can bring INIT from L1 directly inside the app.
 
 ### How to Run Locally
 
-1. Clone: `git clone https://github.com/Kumarutkarsh9470/INITIA_submission.git`
-2. Install: `cd INITIA_submission/frontend && npm install`
-3. Run: `npm run dev` — opens at `http://localhost:5173`
-4. The dev server auto-proxies to the production chain. Connect your wallet and click **"Get Test sUSD"** to start trading.
+1. `git clone https://github.com/Kumarutkarsh9470/INITIA_submission.git`
+2. `cd INITIA_submission/frontend && npm install`
+3. `npm run dev` — opens at `http://localhost:5173`
+4. Connect your wallet and click **"Get Test sUSD"** to start trading. The dev server proxies everything to our production chain, so no local node needed.
 
 ---
 
 ## Architecture
 
-| Contract | Description |
+| Contract | What it does |
 |---|---|
-| **CollateralToken** | ERC-20 "SignalUSD" (sUSD) used as collateral across the protocol |
-| **GaussianMath** | Library providing Normal CDF/PDF for pmAMM pricing |
-| **pmAMM** | Parimutuel AMM with ERC-1155 outcome tokens, constant-product trading + LMSR price display |
-| **ForecasterReputation** | Tracks user prediction accuracy, volume, and recency to compute reputation scores |
-| **MarketFactory** | Creates/resolves markets (AUTO_ORACLE, SOCIAL_COUNCIL, CREATOR_RESOLVE) |
-| **ResolutionCouncil** | Weighted-vote dispute resolution by reputable forecasters |
-| **PositionVault** | Lending pool where users borrow against outcome-token collateral |
-| **MockOracle** | Test stub for Initia Connect Oracle |
+| **CollateralToken** | ERC-20 "SignalUSD" (sUSD) — the collateral token for the whole protocol |
+| **GaussianMath** | On-chain Normal CDF/PDF library for AMM pricing |
+| **pmAMM** | The AMM itself — mints ERC-1155 outcome tokens, handles trading |
+| **ForecasterReputation** | Tracks prediction accuracy, volume, recency → reputation score |
+| **MarketFactory** | Creates and resolves markets (oracle, council, or creator modes) |
+| **ResolutionCouncil** | Dispute resolution via weighted votes from reputable forecasters |
+| **PositionVault** | Lending pool — deposit sUSD, borrow against outcome-token collateral |
+| **MockOracle** | Stub for Initia Connect Oracle (used in tests) |
 
 ---
 
-## For Contributors — Frontend Development
+## Running the Frontend
 
-> **You do NOT need your own blockchain node.** The Vite dev server automatically proxies
-> API calls to the production chain running on our Contabo VPS.
-
-### Setup (3 commands)
+You don't need a blockchain node. The Vite dev server proxies all API calls to our production chain.
 
 ```bash
 git clone https://github.com/Kumarutkarsh9470/INITIA_submission.git
@@ -57,58 +57,22 @@ npm install
 npm run dev
 ```
 
-That's it. Open `http://localhost:5173` in your browser.
+Open `http://localhost:5173`. Connect your wallet, hit "Get Test sUSD", and you're good to go.
 
-### What happens under the hood
+Under the hood, the dev server forwards `/evm-rpc`, `/cosmos-rpc`, `/cosmos-rest`, and `/faucet` to our Contabo VPS at `207.180.203.32:8080`. Contract addresses come from `deployed-addresses.json` — no `.env` file needed.
 
-- The Vite dev server proxies `/evm-rpc`, `/cosmos-rpc`, `/cosmos-rest`, `/faucet` to the production server at `207.180.203.32:8080`
-- Contract addresses are bundled from `deployed-addresses.json` (already in the repo)
-- No `.env` file needed — defaults work out of the box
+### Tech stack
 
-### Getting test tokens
-
-1. Connect your wallet (InterwovenKit / Initia Wallet)
-2. Click **"Get Test sUSD"** on the Dashboard — this sends you both native GAS (for tx fees) and 10,000 sUSD
-
-### Frontend tech stack
-
-- React 19 + TypeScript
-- Vite 5 + Tailwind CSS 4
-- wagmi 2.17.2 + viem 2.x
-- @initia/interwovenkit-react 2.6.0
+- React 19, TypeScript, Vite 5, Tailwind CSS 4
+- wagmi 2.17 + viem 2.x for EVM reads
+- @initia/interwovenkit-react 2.6 for wallet + auto-sign + bridge
 - react-router-dom 7
-
-### Key files
-
-```
-frontend/
-  src/
-    main.tsx              # App entry, InterwovenKit providers, chain config
-    App.tsx               # Router
-    pages/                # All page components
-    hooks/
-      useContracts.ts     # viem publicClient for contract reads
-      useWallet.tsx       # InterwovenKit wallet hook (sendTx)
-      useMarket.ts        # Market data fetching
-      useReputation.ts    # Reputation score fetching
-    lib/
-      addresses.ts        # Reads deployed-addresses.json
-      abis/               # Contract ABIs (JSON)
-    components/
-      Layout.tsx          # Navbar + page layout
-      ErrorBoundary.tsx   # Crash boundary
-  deployed-addresses.json # Production contract addresses (auto-imported)
-  .env.production         # Production env vars (relative paths for nginx)
-  vite.config.ts          # Dev proxy → production server
-```
 
 ---
 
-## For Contributors — Smart Contract Development
+## Running the Tests
 
-> **Only needed if you're modifying Solidity contracts.** Frontend-only contributors can skip this section.
-
-### Running tests locally (no chain needed)
+All 30 tests run against Hardhat's in-memory EVM — no chain needed:
 
 ```bash
 # From the project root
@@ -116,91 +80,60 @@ npm install
 npx hardhat test
 ```
 
-All 30 tests run against Hardhat's in-memory EVM — no external chain required.
+---
 
-### Deploying to a local Hardhat node
+## Redeploying Contracts
 
-```bash
-# Terminal 1: Start local node
-npx hardhat node
+> Only needed if you're changing Solidity code.
 
-# Terminal 2: Deploy + wire
-npx hardhat run scripts/deploy.js --network localhost
-npx hardhat run scripts/wire.js --network localhost
-```
-
-### Deploying to the production chain
-
-> ⚠️ **Only do this if you need to redeploy contracts.** This overwrites production.
-
-1. Get the deployer private key from the team lead
-2. Create a `.env` file in the project root:
+1. Set up `.env` in the project root:
    ```
    MINIEVM_RPC_URL=http://207.180.203.32:8547
    PRIVATE_KEY=0x_YOUR_KEY_HERE
    MINIEVM_CHAIN_ID=728643862094908
    ```
-3. Deploy:
+2. Deploy and wire:
    ```bash
    npx hardhat run scripts/deploy.js --network minievm
    npx hardhat run scripts/wire.js --network minievm
-   ```
-4. Copy addresses to frontend:
-   ```bash
    cp deployed-addresses.json frontend/deployed-addresses.json
    ```
-5. Rebuild frontend on the VPS (SSH into Contabo, or ask the team lead)
+3. Rebuild and deploy the frontend on the VPS.
 
-### Contract tech stack
+### Contract stack
 
-- Solidity 0.8.24 (viaIR enabled, Paris EVM target)
-- Hardhat 2.28.6
-- OpenZeppelin Contracts 5.x
-- Ethers.js v6
+- Solidity 0.8.24 (viaIR, Paris EVM target)
+- Hardhat 2.28.6, OpenZeppelin 5.x, Ethers v6
 
 ---
 
-## Production Deployment
+## Production Infrastructure
 
-The production instance runs on a Contabo VPS at `207.180.203.32`:
+Everything runs on a Contabo VPS (`207.180.203.32`). Nginx on port 8080 handles routing:
 
-| Service | Port | Description |
-|---|---|---|
-| nginx | 8080 | Frontend + API reverse proxy |
-| minitiad (EVM RPC) | 8547 | MiniEVM JSON-RPC |
-| minitiad (Cosmos RPC) | 26659 | Tendermint RPC |
-| minitiad (REST) | 1318 | Cosmos LCD/REST API |
-| faucet | 3002 | Token faucet (GAS + sUSD) |
-
-Nginx routes on port 8080:
-- `/` → static frontend files
-- `/evm-rpc` → EVM JSON-RPC
-- `/cosmos-rpc` → Cosmos RPC
-- `/cosmos-rest` → Cosmos REST
-- `/faucet` → faucet server
-
-### Chain details
-
-| Property | Value |
+| Route | Backend |
 |---|---|
-| Cosmos chain ID | `signalmarket` |
-| EVM chain ID | `728643862094908` |
-| Native token | GAS |
-| Block time | ~1s |
+| `/` | Static frontend files |
+| `/evm-rpc` | MiniEVM JSON-RPC (port 8547) |
+| `/cosmos-rpc` | Tendermint RPC (port 26659) |
+| `/cosmos-rest` | Cosmos LCD/REST (port 1318) |
+| `/faucet` | Token faucet — sends GAS + sUSD |
+
+Chain ID: `signalmarket` (Cosmos) / `728643862094908` (EVM). Native token: GAS.
 
 ---
 
-## Project Structure
+## Project Layout
 
 ```
-contracts/              # Solidity source files (8 contracts)
+contracts/              # 8 Solidity contracts
 scripts/
-  deploy.js             # Deploys all contracts, saves addresses
-  wire.js               # Sets factory references, approvals, seeds vault
-  seed.js               # Seeds test data
+  deploy.js             # Deploy all contracts
+  wire.js               # Wire references, seed vault
+  seed.js               # Seed test data
 test/
   SignalMarket.test.js  # 30-test suite
-frontend/               # React frontend
-deployed-addresses.json # Production contract addresses
-hardhat.config.js       # Hardhat config (Solidity 0.8.24, Paris EVM)
+frontend/               # React + TypeScript frontend
+deployed-addresses.json # Current production addresses
+hardhat.config.js       # Solidity 0.8.24, Paris EVM
 ```

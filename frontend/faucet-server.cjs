@@ -104,7 +104,7 @@ async function sendNativeGas(evmAddr) {
     const cmd =
       `minitiad tx bank send gas-station ${bech32Addr} ${GAS_AMOUNT}GAS ` +
       `--home ~/.minitia --keyring-backend test --node tcp://localhost:26657 ` +
-      `--chain-id trying --gas auto --gas-adjustment 1.5 --fees 1000GAS -y`;
+      `--chain-id signalmarket --gas auto --gas-adjustment 1.5 --fees 1000GAS -y`;
     const out = execSync(cmd, { encoding: "utf8", timeout: 15000 });
     console.log("GAS send result:", out.trim().split("\n").pop());
     return true;

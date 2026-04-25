@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 ###############################################################################
-# redeploy.sh — Full contract redeployment + frontend rebuild + Vercel deploy.
+# redeploy.sh — Full contract redeployment + frontend rebuild.
 #
 # Steps:
 #   1. Compile Solidity contracts
@@ -8,7 +8,6 @@
 #   3. Wire contracts (set factory refs, seed vault, fund users)
 #   4. Copy deployed-addresses.json to frontend
 #   5. Rebuild frontend
-#   6. Deploy to Vercel (if tunnel URL is available)
 #
 # Usage:
 #   ./scripts/redeploy.sh              # full redeploy
@@ -77,7 +76,7 @@ cd "$PROJECT_ROOT"
 
 echo ""
 echo -e "${GREEN}━━━ Redeployment complete! ━━━${NC}"
-echo -e "${YELLOW}If deploying to production, copy the dist folder to the VPS:${NC}"
+echo -e "${YELLOW}Copy the dist folder to the VPS:${NC}"
 echo -e "  scp -r frontend/dist/* root@207.180.203.32:/home/signalmarket/app/frontend/dist/"
 echo ""
 
@@ -85,7 +84,4 @@ echo ""
 latest=$(node -e "const d=require('./deployed-addresses.json'); const l=d[d.length-1]; console.log(JSON.stringify(l.addresses,null,2))")
 echo -e "${CYAN}Latest deployment:${NC}"
 echo "$latest"
-echo ""
-if [ -f "$TUNNEL_URL_FILE" ]; then
-  echo -e "${CYAN}Tunnel URL:${NC} $(cat "$TUNNEL_URL_FILE")"
-fi
+
