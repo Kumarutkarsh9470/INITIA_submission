@@ -1,7 +1,7 @@
 {
   "project_name": "SignalMarket",
   "repo_url": "https://github.com/Kumarutkarsh9470/INITIA_submission",
-  "commit_sha": "d32a5cef7de99887af1cd1c326b06334fde7d281",
+  "commit_sha": "132cc510a43b24058a5f72b3a8676f93895e7ac9",
   "rollup_chain_id": "signalmarket",
   "deployed_address": "0xE0da5FE23795e640f7B46c1EFC25178883C6D529",
   "vm": "evm",
